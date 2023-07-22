@@ -1,0 +1,15 @@
+[package]
+name = "mail-rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.72"
+lettre = "0.10.4"
+sled = "0.34.7"
+strum = "0.21"
+strum_macros = "0.21"
+clap = { version = "4.1.1", features = ["derive"] }
+clap_complete = "4.1.0"
