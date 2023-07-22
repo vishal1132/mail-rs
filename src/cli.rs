@@ -4,42 +4,41 @@ use clap::Parser;
 #[command(name = "mail", author, version, about, long_about)]
 pub struct MailCLI {
     #[clap(subcommand)]
-    pub cmd: cmd,
+    pub cmd: Cmd,
 }
 
-
 #[derive(Debug, Parser)]
-pub enum cmd{
-    User{
+pub enum Cmd {
+    User {
         #[clap(subcommand)]
         user: User,
     },
-    Mail{
-        #[clap(long,short)]
+    Mail {
+        #[clap(long, short)]
         content_file: String,
-        #[clap(long,short)]
+        #[clap(long, short)]
         to_file: String,
     },
 }
 
 #[derive(Debug, Parser)]
-pub enum User{
-    Add{
-        #[clap(long,short)]
+pub enum User {
+    Add {
+        #[clap(long, short)]
         fname: String,
-        #[clap(long,short)]
+        #[clap(long, short)]
         lname: String,
-        #[clap(long,short)]
+        #[clap(long, short)]
         display_name: String,
-        #[clap(long,short)]
+        #[clap(long, short)]
         email: String,
-        #[clap(long,short)]
+        #[clap(long, short)]
         provider: String,
-        #[clap(long,short)]
+        #[clap(long, short)]
         password: String,
     },
-    Delete{
-        #[clap(long,short)]
+    Delete {
+        #[clap(long, short)]
         id: String,
     },
 }

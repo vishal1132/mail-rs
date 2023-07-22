@@ -1,0 +1,1 @@
+`cat emails.csv| awk -F ',' '{print $1 " <"  $3 ">," "\"fname="$1"\""}' | sed 1d `

@@ -18,17 +18,16 @@ pub fn get_email_provider(s: &str) -> EmailProviders {
     }
 }
 
-pub trait Emailer {
+pub trait Emailers {
     fn smtp_address() -> String;
 }
 
-
-pub struct emailer {
+pub struct Emailer {
     mailer: lettre::SmtpTransport,
     u: User,
 }
 
-impl emailer {
+impl Emailer {
     pub fn new(e: EmailProviders, u: crate::user::User) -> Self {
         let smtp_address = match e {
             EmailProviders::Gmail => gmail::Gmail::smtp_address(),
@@ -39,7 +38,7 @@ impl emailer {
             .credentials(creds)
             .build();
 
-        emailer { mailer, u }
+        Emailer { mailer, u }
     }
 
     pub fn send_mail(&self, body: &str, subject: &str, to: &str) -> anyhow::Result<()> {

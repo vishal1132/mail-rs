@@ -1,13 +1,11 @@
-use std::error::Error;
-
-use crate::user::{self, User};
-pub struct database {
+use crate::user::User;
+pub struct Database {
     db: sled::Db,
 }
 
-impl database {
-    pub fn new(db: sled::Db) -> database {
-        database { db }
+impl Database {
+    pub fn new(db: sled::Db) -> Database {
+        Database { db }
     }
 
     pub fn insert_user(&self, u: User) -> anyhow::Result<Option<sled::IVec>> {
