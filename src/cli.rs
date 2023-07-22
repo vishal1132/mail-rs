@@ -16,15 +16,30 @@ pub enum cmd{
     },
     Mail{
         #[clap(long,short)]
-        provider: String,
+        content_file: String,
         #[clap(long,short)]
-        file: String,
+        to_file: String,
     },
 }
 
 #[derive(Debug, Parser)]
 pub enum User{
-    Add,
-    Delete,
-    Modify,
+    Add{
+        #[clap(long,short)]
+        fname: String,
+        #[clap(long,short)]
+        lname: String,
+        #[clap(long,short)]
+        display_name: String,
+        #[clap(long,short)]
+        email: String,
+        #[clap(long,short)]
+        provider: String,
+        #[clap(long,short)]
+        password: String,
+    },
+    Delete{
+        #[clap(long,short)]
+        id: String,
+    },
 }

@@ -11,9 +11,17 @@ pub enum EmailProviders {
     Gmail,
 }
 
+pub fn get_email_provider(s: &str) -> EmailProviders {
+    match s {
+        "gmail" => EmailProviders::Gmail,
+        _ => EmailProviders::Gmail,
+    }
+}
+
 pub trait Emailer {
     fn smtp_address() -> String;
 }
+
 
 pub struct emailer {
     mailer: lettre::SmtpTransport,
@@ -34,7 +42,7 @@ impl emailer {
         emailer { mailer, u }
     }
 
-    pub fn send_mail(self, body: &str, subject: &str, to: &str) -> anyhow::Result<()> {
+    pub fn send_mail(&self, body: &str, subject: &str, to: &str) -> anyhow::Result<()> {
         let email = Message::builder()
             .from(
                 format!("{} <{}>", self.u.display_name, self.u.email)
