@@ -101,7 +101,7 @@ fn send_mail(db: database::Database, content_file: String, to_file: String, dry_
         let subject = content.lines().next().unwrap();
         let body = content.lines().skip(1).collect::<Vec<&str>>().join("\n");
         if dry_run {
-            println!("subject: {}\n body: {}\n to: {}", subject, body, to[0]);
+            println!("subject: {}\nbody: {}\nto: {}", subject, body, to[0]);
         }
         if send{
             mailer.send_mail(body.as_str(), subject, to[0])?;
