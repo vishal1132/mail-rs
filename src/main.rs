@@ -3,11 +3,11 @@ mod database;
 mod email;
 mod user;
 
-use handlebars::{Handlebars,to_json};
 use clap::Parser;
 use cli::MailCLI;
-use std::str;
+use handlebars::{to_json, Handlebars};
 use serde_json::value::Map;
+use std::str;
 
 const SLED_PATH: &str = "~/.config/mailrs/mail";
 
@@ -17,20 +17,20 @@ fn main() -> anyhow::Result<()> {
 
     let mail_cli = MailCLI::parse();
     match mail_cli.cmd {
-        cli::Cmd::Reset=>{
+        cli::Cmd::Reset => {
             db.clear()?;
         }
         cli::Cmd::User { user } => match user {
-            cli::User::List=>{
-                let users=db.get_users()?;
-                for user in users{
-                    println!("{}",str::from_utf8(&user).unwrap());
+            cli::User::List => {
+                let users = db.get_users()?;
+                for user in users {
+                    println!("{}", str::from_utf8(&user).unwrap());
                 }
-            },
-            cli::User::Default=>{
-                let user=db.get_default_user_id()?;
-                println!("{}",str::from_utf8(&user.unwrap()).unwrap());
-            },
+            }
+            cli::User::Default => {
+                let user = db.get_default_user_id()?;
+                println!("{}", str::from_utf8(&user.unwrap()).unwrap());
+            }
             cli::User::Add {
                 fname,
                 lname,
@@ -63,14 +63,19 @@ fn main() -> anyhow::Result<()> {
             to_file,
             dry_run,
             send,
-        } => send_mail(db, content_file, to_file, dry_run,send)?,
+        } => send_mail(db, content_file, to_file, dry_run, send)?,
     }
 
     Ok(())
 }
 
-
-fn send_mail(db: database::Database, content_file: String, to_file: String, dry_run: bool, send: bool) -> anyhow::Result<()> {
+fn send_mail(
+    db: database::Database,
+    content_file: String,
+    to_file: String,
+    dry_run: bool,
+    send: bool,
+) -> anyhow::Result<()> {
     let default_user_id = opt_to_res(
         db.get_default_user_id()?,
         "No default user id found, please create a default user first".to_string(),
@@ -87,23 +92,23 @@ fn send_mail(db: database::Database, content_file: String, to_file: String, dry_
     let tos = std::fs::read_to_string(to_file)?;
     for to in tos.lines() {
         // TODO: can be optimised to use same memory always, clearing the keys without having to call alloc again and again.
-        let mut data = Map::new(); 
+        let mut data = Map::new();
         let to = to.split(',').collect::<Vec<&str>>();
-        if to.len()==2{
-            let args=to[1].trim_matches('"');
-            let args=args.split(',').collect::<Vec<&str>>();
-            for arg in args{
-                let arg=arg.split('=').collect::<Vec<&str>>();
+        if to.len() == 2 {
+            let args = to[1].trim_matches('"');
+            let args = args.split(',').collect::<Vec<&str>>();
+            for arg in args {
+                let arg = arg.split('=').collect::<Vec<&str>>();
                 data.insert(arg[0].to_string(), to_json(arg[1].to_string()));
             }
         }
-        let content=handlebars.render("email", &data)?;
+        let content = handlebars.render("email", &data)?;
         let subject = content.lines().next().unwrap();
         let body = content.lines().skip(1).collect::<Vec<&str>>().join("\n");
         if dry_run {
             println!("subject: {}\nbody: {}\nto: {}", subject, body, to[0]);
         }
-        if send{
+        if send {
             mailer.send_mail(body.as_str(), subject, to[0])?;
         }
     }

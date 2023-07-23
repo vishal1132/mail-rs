@@ -23,7 +23,7 @@ pub enum Cmd {
         #[clap(long, short)]
         send: bool,
     },
-    Reset
+    Reset,
 }
 
 #[derive(Debug, Parser)]
