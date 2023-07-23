@@ -2,10 +2,12 @@
 
 When you have to bulk email a bunch of people(any reason?), this script can help you do that. You can email different emails to different people via this script, and the rust template helps with that. 
 
+**The primary motive of this script is -> Things are not looking good at the $ORG and hence I am job hunting hence the need to send multiple HRs my resume and the email asking for the job opportunity/referral.**
+
 So, the idea is-> 
 * You create a user which is going to be used to send the emails.
     * That user is saved in the file database, using [sled](https://github.com/spacejam/sled) for this. Much like [boltdb](https://github.com/boltdb/bolt) which is an embedded K/V store for go and is much more familiar for it's wide usage in a lot of big open source projects including some from CNCF.
-* You write the email content along with the subject in a .hbs file. It should be a templatised content, example attached in the repository itself at `./email.hbs`.
+* You write the email content along with the subject in a .hbs file. It should be a templatised content, example attached in the repository itself at `./email.hbs`. Use chatgpt or anything else to create the content. That is not in the scope of this CLI, and this won't be turning into a TUI either to give a scratchpad to write emails(atleast as of now, that is the focus).
     * The subject has to be the first line and can contain template parameters.
     * The rest of the lines are body, can be long and can contain template parameters as well.
 * You create another csv file with the list of emails and the template parameters. Example attached in the repository itself at `tos.csv` which can simply be gotten by running `cat emails.csv| awk -F ',' '{print $1 " <"  $3 ">," "\"fname="$1"\""}' | sed 1d  > tos.csv`.
