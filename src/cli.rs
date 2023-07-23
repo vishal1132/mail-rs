@@ -18,7 +18,12 @@ pub enum Cmd {
         content_file: String,
         #[clap(long, short)]
         to_file: String,
+        #[clap(long, short)]
+        dry_run: bool,
+        #[clap(long, short)]
+        send: bool,
     },
+    Reset
 }
 
 #[derive(Debug, Parser)]
@@ -37,6 +42,8 @@ pub enum User {
         #[clap(long, short)]
         password: String,
     },
+    List,
+    Default,
     Delete {
         #[clap(long, short)]
         id: String,
